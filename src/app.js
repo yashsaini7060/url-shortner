@@ -6,6 +6,7 @@ import passport from './config/oauth.js'
 import connectDB from './config/database.js';
 import authRoutes from './routes/authRoutes.js';
 import cookieParser from 'cookie-parser';
+import { isAuthenticated } from './middleware/authMiddleware.js';
 dotenv.config('../.env');
 
 const PORT = process.env.PORT || 4000;
@@ -37,12 +38,12 @@ app.use(passport.session());
 app.get("/", (req, res) => {
   res.send('<h1>Home</h1><a href="/auth/google">Login with Google</a>');
 });
+
 // Dashboard route to display profile name (protected)
-app.get("/dashboard", (req, res) => {
-  console.log(req)
-  if (!req.isAuthenticated()) return res.redirect("/");
-  res.send(`<h1>Welcome, ${req.user.displayName}</h1><a href="/auth/logout">Logout</a>`);
+app.get("/dashboard", isAuthenticated, (req, res) => {
+  res.send(`<h1>Welcome, ${req.user.name}</h1><a href="/auth/logout">Logout</a>`);
 });
+
 
 // Use authentication routes
 app.use("/auth", authRoutes);
