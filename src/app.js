@@ -2,8 +2,8 @@ import dotenv from 'dotenv';
 import express from 'express';
 import session from 'express-session';
 import passport from './config/oauth.js'
-
 import connectDB from './config/database.js';
+import redis from './config/redis.js';
 import authRoutes from './routes/authRoutes.js';
 import cookieParser from 'cookie-parser';
 import { isAuthenticated } from './middleware/authMiddleware.js';
@@ -14,6 +14,7 @@ const PORT = process.env.PORT || 4000;
 
 // Connect to MongoDB
 connectDB();
+redis.connect();
 const app = express();
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
