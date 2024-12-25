@@ -3,18 +3,18 @@ import express from 'express';
 import session from 'express-session';
 import passport from './config/oauth.js'
 import connectDB from './config/database.js';
-import redis from './config/redis.js';
 import authRoutes from './routes/authRoutes.js';
+import urlRoutes from './routes/urlRoutes.js';
 import cookieParser from 'cookie-parser';
 import { isAuthenticated } from './middleware/authMiddleware.js';
 dotenv.config('../.env');
-
 const PORT = process.env.PORT || 4000;
 
 
 // Connect to MongoDB
 connectDB();
-redis.connect();
+
+
 const app = express();
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
@@ -41,13 +41,14 @@ app.get("/", (req, res) => {
 });
 
 // Dashboard route to display profile name (protected)
-app.get("/dashboard", isAuthenticated, (req, res) => {
+app.get("/dashboard", (req, res) => {
   res.send(`<h1>Welcome, ${req.user.name}</h1><a href="/auth/logout">Logout</a>`);
 });
 
 
 // Use authentication routes
 app.use("/auth", authRoutes);
+app.use("/api/url", urlRoutes);
 
 
 app.use('/ping', (req, res) => {

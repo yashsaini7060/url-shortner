@@ -16,11 +16,16 @@
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.x",
     "express": "^4.x",
+    "express-rate-limit": "^7.5.0",
     "express-session": "^1.18.1",
+    "geoip-lite": "^1.4.10",
+    "ioredis": "^5.4.2",
     "mongoose": "^8.x",
+    "nanoid": "^5.0.9",
     "nodemon": "^3.1.9",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
-    "redis": "^4.7.0"
+    "rate-limit-redis": "^4.2.0",
+    "ua-parser-js": "^2.0.0"
   }
 }
