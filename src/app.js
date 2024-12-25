@@ -12,6 +12,7 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import errorHandler from './middleware/errorHandler.js';
 import cors from 'cors';
+import limiter from './middleware/rateLimiter.js';
 dotenv.config('../.env');
 const PORT = process.env.PORT || 4000;
 
@@ -25,6 +26,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser())
+app.use(limiter)
 // Configure session middleware
 app.use(
   session({

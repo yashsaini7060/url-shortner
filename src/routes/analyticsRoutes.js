@@ -1,12 +1,12 @@
 import express from 'express';
 import { getUrlAnalytics, getTopicAnalytics, getOverallAnalytics } from '../controllers/analyticsController.js';
 import { isAuthenticated } from '../middleware/authMiddleware.js';
-
+import limiter from '../middleware/rateLimiter.js';
 const router = express.Router();
 
-router.get('/overall', isAuthenticated, getOverallAnalytics);
-router.get('/:alias', isAuthenticated, getUrlAnalytics);
-router.get('/topic/:topic', isAuthenticated, getTopicAnalytics);
+router.get('/overall', isAuthenticated, limiter, getOverallAnalytics);
+router.get('/:alias', isAuthenticated, limiter, getUrlAnalytics);
+router.get('/topic/:topic', isAuthenticated, limiter, getTopicAnalytics);
 
 /**
  * @swagger

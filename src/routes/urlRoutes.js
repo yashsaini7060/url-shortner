@@ -1,6 +1,7 @@
 import express from 'express';
 import { createShortUrl, redirectUrl } from '../controllers/urlController.js';
 import { isAuthenticated } from '../middleware/authMiddleware.js';
+import limiter from '../middleware/rateLimiter.js';
 const router = express.Router();
 
 /**
@@ -35,6 +36,6 @@ const router = express.Router();
  *       401:
  *         description: Unauthorized
  */
-router.post('/shorten', isAuthenticated, createShortUrl);
+router.post('/shorten', isAuthenticated, limiter, createShortUrl);
 router.get('/shorten/:alias', redirectUrl);
 export default router;
