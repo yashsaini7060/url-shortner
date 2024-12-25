@@ -3,6 +3,36 @@ import passport from "passport";
 
 const router = Router();
 
+/**
+ * @swagger
+ * /auth/google:
+ *   get:
+ *     summary: Authenticate with Google
+ *     description: Initiates Google OAuth2 authentication flow
+ *     tags: [Authentication]
+ *     responses:
+ *       302:
+ *         description: Redirects to Google login
+ * 
+ * /auth/google/callback:
+ *   get:
+ *     summary: Google OAuth callback
+ *     description: Handles the Google OAuth2 callback
+ *     tags: [Authentication]
+ *     responses:
+ *       302:
+ *         description: Redirects to dashboard on success
+ * 
+ * /auth/logout:
+ *   get:
+ *     summary: Logout user
+ *     description: Logs out the currently authenticated user
+ *     tags: [Authentication]
+ *     responses:
+ *       302:
+ *         description: Redirects to home page
+ */
+
 // Initiate google OAuth login
 router.get(
   "/google",

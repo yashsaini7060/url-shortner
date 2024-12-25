@@ -8,6 +8,9 @@ import urlRoutes from './routes/urlRoutes.js';
 import analyticsRoutes from './routes/analyticsRoutes.js'
 import cookieParser from 'cookie-parser';
 import { isAuthenticated } from './middleware/authMiddleware.js';
+import swaggerUi from 'swagger-ui-express';
+import swaggerJsdoc from 'swagger-jsdoc';
+import errorHandler from './middleware/errorHandler.js';
 dotenv.config('../.env');
 const PORT = process.env.PORT || 4000;
 
@@ -19,6 +22,7 @@ connectDB();
 const app = express();
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
+app.use(cors());
 app.use(cookieParser())
 // Configure session middleware
 app.use(
@@ -34,7 +38,40 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Add Swagger configuration before app initialization
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'URL Shortener API',
+      version: '1.0.0',
+      description: 'API documentation for URL Shortener service',
+    },
+    servers: [
+      {
+        url: `http://localhost:${PORT}`,
+        description: 'Development server',
+      },
+    ],
+    components: {
+      securitySchemes: {
+        googleAuth: {
+          type: 'oauth2',
+          description: 'Google OAuth2 authentication',
+          flows: {
+            implicit: {
+              authorizationUrl: '/auth/google',
+              scopes: {},
+            },
+          },
+        },
+      },
+    },
+  },
+  apis: ['./src/routes/*.js'], // Path to the API routes
+};
 
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 // Home route
 app.get("/", (req, res) => {
@@ -52,12 +89,14 @@ app.use("/auth", authRoutes);
 app.use("/api", urlRoutes);
 app.use("/api/analytics", analyticsRoutes);
 
-
+// Add Swagger UI route before other routes
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/ping', (req, res) => {
   res.send("Pong");
 })
-
+// Error Handler
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server started at ${PORT}`);
