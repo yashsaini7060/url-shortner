@@ -11,6 +11,7 @@ import { isAuthenticated } from './middleware/authMiddleware.js';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import errorHandler from './middleware/errorHandler.js';
+import cors from 'cors';
 dotenv.config('../.env');
 const PORT = process.env.PORT || 4000;
 
