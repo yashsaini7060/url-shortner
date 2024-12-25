@@ -31,7 +31,7 @@ export const createShortUrl = async (req, res) => {
     await redis.setex(`url:${shortUrl}`, CACHE_TTL, longUrl);
 
     res.status(201).json({
-      shortUrl: `${process.env.BASE_URL}/${shortUrl}`,
+      shortUrl: `${process.env.BASE_URL}/api/shorten/${shortUrl}`,
       createdAt: url.createdAt,
     });
   } catch (error) {
